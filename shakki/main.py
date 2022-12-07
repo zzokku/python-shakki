@@ -2,4 +2,6 @@ from shakki import Shakki
 
 shakki = Shakki()
 
-print(shakki)
+ulkona = shakki.ulosLaudalta((0,1 ), (2, 2))
+
+print(ulkona)

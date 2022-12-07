@@ -3,11 +3,11 @@ class Shakki:
     """ 
     Merkkijonon ensimmäinen kirjain kertoo shakkinappulan värin 
     esim. m tarkoittaa mustaa. Toinen / kolmas kirjain taas kertoo shakkinappulan nimen esim. 
-    kg = kuningas, k = kuningatar, l = lähetti ja r = ratsu.
+    k = kuningas, d = daami = kuningatar = , l = lähetti ja r = ratsu.
     """
 
     lauta = [
-        ["mt", "mr", "ml", "mkg", "mk", "ml", "mr", "mt"],
+        ["mt", "mr", "ml", "md", "mk", "ml", "mr", "mt"],
         ["ms", "ms", "ms", "ms", "ms", "ms", "ms", "ms"],
         ["", "", "", "", "", "", "", ""],
         ["", "", "", "", "", "", "", ""],
@@ -32,33 +32,44 @@ class Shakki:
     def __str__(self) -> str:
         return self.tulostaLauta
 
-    def __siirronPatevyys(self, koordinaatti1: int, koordiaatti2: int):
-        pass
-
-    # Siirtää shakkinappulan
-    def siirto(self, koordinaatti1: int, koordinaatti2: int) -> bool:
-        if self.siirronPatevyys:
-            return True
+    def ulosLaudalta(self, koordinaatti1: tuple, koordiaatti2: tuple) -> bool:
+        for alkio in koordinaatti1+koordiaatti2:
+            if not -1 < alkio < 8:
+                return True
         return False
+
+    # Siirtää shakkinappulan laudalla
+    def siirto(self, koordinaatti1: tuple, koordinaatti2: tuple) -> None:
+        self.board[koordinaatti2[0]][koordinaatti2[1]] = self.board[koordinaatti1[0]][koordinaatti1[1]]
+        self.board[koordinaatti1[0]][koordinaatti1[1]] = ""
+        
     
     # Palauttaa listan kaikista värin laillisista siirroista
     def __laillisetSiirrot(self, vari: str) -> list:
         pass
 
     # Ratsun lailliset siirrot värin ja koordinaatin perusteella
-    def __rLailliset(self, vari: str, koordinaatti: int) -> list:
+    def __rLailliset(self, vari: str, koordinaatti: tuple) -> list:
         pass
 
-    def __lLailliset(self, vari: str, koordinaatti: int) -> list:
+    # Lähetin lailliset siirrot värin ja koordinaatin perusteella
+    def __lLailliset(self, vari: str, koordinaatti: tuple) -> list:
         pass
 
-    def __tLailliset(self, vari: str, koordinaatti: int) -> list:
+    # Tornin lailliset siirrot värin ja koordinaatin perusteella
+    def __tLailliset(self, vari: str, koordinaatti: tuple) -> list:
         pass
 
-    def __sLailliset(self, vari: str, koordinaatti: int) -> list:
+    # Soturin lailliset siirrot värin ja koordinaatin perusteella
+    def __sLailliset(self, vari: str, koordinaatti: tuple) -> list:
         pass
 
-    def kgLailliset(self, vari: str, koordinaatti: int) -> list:
+    # Kuninkaan lailliset siirrot värin ja koordinaatin perusteella
+    def kLailliset(self, vari: str, koordinaatti: tuple) -> list:
+        pass
+
+    # Daamin lailliset siirrot värin ja koordinaatin perusteella
+    def dLailliset(self, vari: str, koordinaatti: tuple) -> list:
         pass
 
         
