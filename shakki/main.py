@@ -3,5 +3,6 @@ from shakki import Shakki
 
 shakki = Shakki()
 shakki.pelilauta()
-shakki.tulostaLauta(shakki.nappulaRyhma("m", "S"))
+print(shakki.nappulaRyhma("m", "S"))
+print(shakki.sLailliset("m"))
 

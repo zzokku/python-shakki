@@ -17,8 +17,12 @@ class Shakki:
         "vT", "vR", "vL", "vD", "vK", "vL", "vT", "vT"
     ]
 
+    alkuperainen_lauta: list
+
+    siirrot: list
+
     def __init__(self) -> None:
-        pass
+        self.alkuperainen_lauta = self.lauta
 
     # Tulostaa pelihetkeä vastaavan laudan "väärinpäin"
     def tulostaVaarinpain(self) -> str:
@@ -45,10 +49,13 @@ class Shakki:
     def laillinenLauta() -> None:
         pass
 
-    # Palauttaa laudan, joka sisältää ainoastaan valitun nappularyhman nappulat.
-    def nappulaRyhma(self, vari: str, ryhma: str) -> list:
-        return [(vari+ryhma) if i == (vari+ryhma) else "" for i in self.lauta]
-        
+    # Palauttaa listan, joka sisältää tietyn nappularyhmän nappuloiden koordinaatit
+    def nappulaRyhma(self, vari: str, tyyppi: str) -> list:
+        return [i for i in range (0, len(self.lauta)) if self.lauta[i] == (vari+tyyppi)]
+    
+    # Selvitetään onko koordinaatin nappula liikkunut
+    def __onkoLiikkunut(self, koordinaatti: int) -> list:
+        return self.lauta[koordinaatti] == self.alkuperainen_lauta[koordinaatti]
 
     # Siirtää shakkinappulan laudalla
     def siirto(self, koordinaatti1: int, koordinaatti2: int) -> None:
@@ -60,28 +67,54 @@ class Shakki:
     def __laillisetSiirrot(self, vari: str) -> list:
         pass
 
+    def hyokkaajatLauta(self, vari: str) -> list:
+        pass
+
     # Ratsun lailliset siirrot värin ja koordinaatin perusteella
-    def __rLailliset(self, vari: str, koordinaatti: int) -> list:
+    def __rLailliset(self, vari: str) -> list:
         pass
 
     # Lähetin lailliset siirrot värin ja koordinaatin perusteella
-    def __lLailliset(self, vari: str, koordinaatti: int) -> list:
+    def __lLailliset(self, vari: str) -> list:
         pass
 
     # Tornin lailliset siirrot värin ja koordinaatin perusteella
-    def __tLailliset(self, vari: str, koordinaatti: int) -> list:
+    def __tLailliset(self, vari: str) -> list:
         pass
 
     # Soturin lailliset siirrot värin ja koordinaatin perusteella
-    def __sLailliset(self, vari: str, koordinaatti: int) -> list:
-        pass
+
+    # TODO: siirron laillisuus
+
+    def sLailliset(self, vari: str) -> list:
+        lailliset = []
+        """ 
+        Asetetaan siirtoja varten kerroin k, joko positiiviseksi (nappulaa siirretään eteenpäin listassa)
+        tai negatiiviseksi (nappulaa siirretään taaksepäin listassa).
+        """
+        k = 1
+        if vari == "v":
+            k = -1
+
+        for i in self.nappulaRyhma(vari, "S"):
+            lailliset.extend([i+(9*k),i+(k*7)])
+            if self.lauta[i+(8*k)] == "":
+                lailliset.append(i+(8*k))
+                if self.__onkoLiikkunut:
+                    lailliset.append(i+(16*k))
+
+        return lailliset
+            
+
+
+            
 
     # Kuninkaan lailliset siirrot värin ja koordinaatin perusteella
-    def kLailliset(self, vari: str, koordinaatti: int) -> list:
+    def kLailliset(self, vari: str) -> list:
         pass
 
     # Daamin lailliset siirrot värin ja koordinaatin perusteella
-    def dLailliset(self, vari: str, koordinaatti: int) -> list:
+    def dLailliset(self, vari: str) -> list:
         pass
 
         
