@@ -22,9 +22,10 @@ class Shakki:
         "", "vT", "vR", "vL", "vD", "vK", "vL", "vR", "vT","",
         "", "", "", "", "", "", "", "", "", ""
     ]
-
+    # Alkuperäinen lauta johon verrata tietyissä tilanteissa
     alkuperainen_lauta: list
 
+    # Kirjanpito laudalla tapahtuineista siirroista
     siirrot: list
 
     def __init__(self) -> None:
@@ -84,8 +85,10 @@ class Shakki:
     # Ratsun lailliset siirrot värin ja koordinaatin perusteella
     def __rLailliset(self, vari: str) -> list:
         pass
-
+    
+    # TODO: yleinen metodi liukuville nappuloille ???
     # Lähetin lailliset siirrot värin ja koordinaatin perusteella
+
     def lLailliset(self, vari: str) -> list:
         lailliset = []
         suunnat = [-11, 11, -9, 9]
@@ -116,17 +119,16 @@ class Shakki:
             for j in suunnat:
                 c = 1
                 siirto = i+(c*j)
-                while self.lauta[siirto] != "":
+                while self.laudanSisalla(siirto):
                     siirto = i+(c*j)
                     c+=1
-                    if self.lauta[siirto] == "" or self.lauta[siirto][0] == vari:
-                        break
                     if self.lauta[siirto][0] == self.vastVari(vari):
                         lailliset.append(siirto)
                         break
-                    else:
+                    if self.lauta[siirto] == " ":
                         lailliset.append(siirto)
-                    
+                    else:
+                        break     
         return lailliset
 
 
