@@ -7,21 +7,21 @@ class Shakki:
 
     Tyhjä merkkijono ("") tarkoittaa, että ruutu on laudan ulkopuolella
     Tyhjä merkkijono välilyönnillä (" ") tarkoittaa tyhjää ruutua.
-
     """
 
     lauta = [
-        "", "", "", "", "", "", "", "", "", ""
-        "", "mT", "mR", "mL", "mK", "mD", "mL", "mR", "mT","",
-        "", "mS", "mS", "mS", "mS", "mS", "mS", "mS", "mS","",
-        "", " ", " ", " ", " ", " ", " ", " ", " ","",
-        "", " ", " ", " ", " ", " ", " ", " ", " ","",
-        "", " ", " ", " ", " ", " ", " ", " ", " ","",
-        "", " ", " ", " ", " ", " ", " ", " ", " ","",
-        "", "vS", "vS", "vS", "vS", "vS", "vS", "vS", "vS","",
-        "", "vT", "vR", "vL", "vD", "vK", "vL", "vR", "vT","",
-        "", "", "", "", "", "", "", "", "", ""
+        "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"
+        "x", "mT", "mR", "mL", "mK", "mD", "mL", "mR", "mT","x",
+        "x", "mS", "mS", "mS", "mS", "mS", "mS", "mS", "mS","x",
+        "x", " ", " ", " ", " ", " ", " ", " ", " ","x",
+        "x", " ", " ", " ", " ", " ", " ", " ", " ","x",
+        "x", " ", " ", " ", " ", " ", " ", " ", " ","x",
+        "x", " ", " ", " ", " ", " ", " ", " ", " ","x",
+        "x", "vS", "vS", "vS", "vS", "vS", "vS", "vS", "vS","x",
+        "x", "vT", "vR", "vL", "vD", "vK", "vL", "vR", "vT","x",
+        "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"
     ]
+
     # Alkuperäinen lauta johon verrata tietyissä tilanteissa
     alkuperainen_lauta: list
 
@@ -45,6 +45,7 @@ class Shakki:
             if (i+1) % 10 == 0:
                 print("\n")
 
+    # Tulostaa pelitilannetta vastaavan pelilaudan
     def pelilauta(self) -> None:
         self.tulostaLauta(self.lauta)
     
@@ -58,10 +59,10 @@ class Shakki:
 
     # Palauttaa listan, joka sisältää tietyn nappularyhmän nappuloiden koordinaatit
     def nappulaRyhma(self, vari: str, tyyppi: str) -> list:
-        return [i for i in range (0, len(self.lauta)) if self.lauta[i] == (vari+tyyppi)]
+        return [i+1 for i in range (10, len(self.lauta)-11) if self.lauta[i] == (vari+tyyppi)]
     
     # Selvitetään onko koordinaatin nappula liikkunut
-    def __onkoLiikkunut(self, koordinaatti: int) -> list:
+    def __eiLiikkunut(self, koordinaatti: int) -> list:
         return self.lauta[koordinaatti] == self.alkuperainen_lauta[koordinaatti]
 
     # Siirtää shakkinappulan laudalla
@@ -71,9 +72,8 @@ class Shakki:
     
     # Palauttaa vastakkaisen varin
     def vastVari(self, vari: str) -> str:
-        if vari == "v":
-            return "m"
-        return "v"
+        return "v" if vari == "m" else "m"
+
 
     # Palauttaa listan kaikista värin laillisista siirroista
     def __laillisetSiirrot(self, vari: str) -> list:
@@ -85,7 +85,7 @@ class Shakki:
     # Ratsun lailliset siirrot värin ja koordinaatin perusteella
     def __rLailliset(self, vari: str) -> list:
         pass
-    
+
     # TODO: yleinen metodi liukuville nappuloille ???
     # Lähetin lailliset siirrot värin ja koordinaatin perusteella
 
@@ -131,32 +131,32 @@ class Shakki:
                         break     
         return lailliset
 
-
-
-        
-
     # Soturin lailliset siirrot värin ja koordinaatin perusteella
 
     # TODO: siirron TÄYDELLINEN laillisuus
     def sLailliset(self, vari: str) -> list:
 
-        lailliset = []
-
         """ 
         Asetetaan siirtoja varten kerroin k, joko positiiviseksi (nappulaa siirretään eteenpäin listassa)
         tai negatiiviseksi (nappulaa siirretään taaksepäin listassa).
         """
-
         k = 1
         if vari == "v":
             k = -1
 
-        for i in self.nappulaRyhma(vari, "S"):
-            if self.lauta[i+(8*k)] == " " and self.laudanSisalla(i+(8*k)):
-                lailliset.append(i+(8*k))
-                if self.__onkoLiikkunut:
-                    lailliset.append(i+(16*k))
+        lailliset = [i for i in self.nappulaRyhma(vari, "S") if self.lauta[i+(11*k)][0] == self.vastVari(vari) or self.lauta[i+(9*k)][0] == self.vastVari(vari)]
 
+        for j in self.nappulaRyhma(vari, "S"):
+            if self.lauta[j+(10*k)] == " ":
+                print("joo")
+                lailliset.append(j+(10*k))
+                if self.__eiLiikkunut(j):
+                    print("ei liikkunut")
+                    lailliset.append(j+(20*k))
+            else:
+                print("EI")
+                print(j)
+                print(j+(10*k))
         return lailliset
             
 

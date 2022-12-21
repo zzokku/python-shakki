@@ -2,10 +2,8 @@ from shakki import Shakki
 
 
 shakki = Shakki()
-
-shakki.siirto(20, 30)
-shakki.siirto(21,31)
-shakki.siirto(30,40)
-print(shakki.tLailliset("m"))
+print(shakki.nappulaRyhma("m", "T"))
+print(shakki.nappulaRyhma("m", "S"))
+print(shakki.sLailliset("m"))
 shakki.pelilauta()
 
