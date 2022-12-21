@@ -10,7 +10,7 @@ class Shakki:
     """
 
     lauta = [
-        "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"
+        "x", "x", "x", "x", "x", "x", "x", "x", "x", "x",
         "x", "mT", "mR", "mL", "mK", "mD", "mL", "mR", "mT","x",
         "x", "mS", "mS", "mS", "mS", "mS", "mS", "mS", "mS","x",
         "x", " ", " ", " ", " ", " ", " ", " ", " ","x",
@@ -59,7 +59,7 @@ class Shakki:
 
     # Palauttaa listan, joka sisältää tietyn nappularyhmän nappuloiden koordinaatit
     def nappulaRyhma(self, vari: str, tyyppi: str) -> list:
-        return [i+1 for i in range (10, len(self.lauta)-11) if self.lauta[i] == (vari+tyyppi)]
+        return [i for i in range (10, len(self.lauta)-11) if self.lauta[i] == (vari+tyyppi)]
     
     # Selvitetään onko koordinaatin nappula liikkunut
     def __eiLiikkunut(self, koordinaatti: int) -> list:
@@ -84,7 +84,9 @@ class Shakki:
 
     # Ratsun lailliset siirrot värin ja koordinaatin perusteella
     def __rLailliset(self, vari: str) -> list:
-        pass
+        lailliset = []
+        for i in [21, -21, 8,-8,-13, 13, 19, -19, -12, 12]:
+            pass
 
     # TODO: yleinen metodi liukuville nappuloille ???
     # Lähetin lailliset siirrot värin ja koordinaatin perusteella
@@ -147,22 +149,12 @@ class Shakki:
         lailliset = [i for i in self.nappulaRyhma(vari, "S") if self.lauta[i+(11*k)][0] == self.vastVari(vari) or self.lauta[i+(9*k)][0] == self.vastVari(vari)]
 
         for j in self.nappulaRyhma(vari, "S"):
-            if self.lauta[j+(10*k)] == " ":
-                print("joo")
+            if self.lauta[j+(9*k)] == " ":
                 lailliset.append(j+(10*k))
                 if self.__eiLiikkunut(j):
-                    print("ei liikkunut")
                     lailliset.append(j+(20*k))
-            else:
-                print("EI")
-                print(j)
-                print(j+(10*k))
         return lailliset
             
-
-
-            
-
     # Kuninkaan lailliset siirrot värin ja koordinaatin perusteella
     def kLailliset(self, vari: str) -> list:
         pass
