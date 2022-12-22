@@ -3,8 +3,8 @@ from shakki import Shakki
 
 shakki = Shakki()
 
-shakki.siirto(20, 30)
-shakki.siirto(21,31)
-print(shakki.tLailliset("m"))
 shakki.pelilauta()
-
+soturit = shakki.nappulaRyhma("m", "S")
+ratsut = shakki.nappulaRyhma("v", "R")
+print(shakki.rLailliset("v", ratsut))
+print(shakki.dLailliset("v", shakki.nappulaRyhma("v", "D")))
