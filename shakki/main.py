@@ -6,20 +6,20 @@ def peli():
     shakki.pelilauta()
     vuoro = "v"
     while True:
+        try:
+            siirrettava = input("syötä siirrettävän koordinaatti: ")
+            k1 = shakki.shakkiKoordinaatit[siirrettava] 
+            print(shakki.indeksitKoordinaateiksi(shakki.lMetodit[shakki.lauta[k1][1]](vuoro, [k1])))
 
-        siirrettava = input("syötä siirrettävän koordinaatti: ")
-        siirto = input("syötä siirron koordinaatti: ")
+            siirto = input("syötä siirron koordinaatti: ")
+            k2 = shakki.shakkiKoordinaatit[siirto]
 
-        k1 = shakki.shakkiKoordinaatit[siirrettava] 
-        k2 = shakki.shakkiKoordinaatit[siirto]
-        
-        if not shakki.siirto(k1, k2):
-            if shakki.lauta[k1][0] != vuoro:
-                print("Siirto epäonnistui.")
-                continue
-
-        vuoro = shakki.vastVari(vuoro)
-        shakki.pelilauta()
+            shakki.siirto(k1, k2)
+            vuoro = shakki.vastVari(vuoro)
+            shakki.pelilauta()
+        except:
+            print("Siirto epäonnistui")
+            continue
 
 peli()
 
