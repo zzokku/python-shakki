@@ -106,14 +106,11 @@ class Shakki:
 
     # Siirtää shakkinappulan laudalla
     # TODO: pseudo laillisen siirron tarkistus
-    def siirto(self, koordinaatti1: int, koordinaatti2: int) -> bool:
-        try:
-            if koordinaatti2 in self.lMetodit[self.lauta[koordinaatti1][1]](self.lauta[koordinaatti1][0], [koordinaatti1]):
-                self.lauta[koordinaatti2] = self.lauta[koordinaatti1]
-                self.lauta[koordinaatti1] = " "
-                return True
-        except:
-            return False
+    def siirto(self, koordinaatti1: int, koordinaatti2: int) -> None:
+        if koordinaatti2 in self.lMetodit[self.lauta[koordinaatti1][1]](self.lauta[koordinaatti1][0], [koordinaatti1]):
+            self.lauta[koordinaatti2] = self.lauta[koordinaatti1]
+            self.lauta[koordinaatti1] = " "
+
         
     # Palauttaa vastakkaisen varin
     def vastVari(self, vari: str) -> str:
@@ -227,4 +224,8 @@ class Shakki:
     
     def linnoitus(self, vari: str, puoli: int) -> None:
         pass
+
+    def indeksitKoordinaateiksi(self, indeksit):
+        return [i for i in list(self.shakkiKoordinaatit.keys()) if self.shakkiKoordinaatit[i] in indeksit]
+
 
