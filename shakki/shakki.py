@@ -5,21 +5,23 @@ class Shakki:
     esim. m tarkoittaa mustaa. Toinen kirjain taas kertoo shakkinappulan nimen esim. 
     K = kuningas, D = daami = kuningatar, L = lähetti ja R = ratsu.
 
-    Tyhjä merkkijono ("") tarkoittaa, että ruutu on laudan ulkopuolella
+    Merkkijono ("x") tarkoittaa, että ruutu on laudan ulkopuolella
     Tyhjä merkkijono välilyönnillä (" ") tarkoittaa tyhjää ruutua.
     """
 
     lauta = [
-        "x", "x", "x", "x", "x", "x", "x", "x", "x", "x",
+        "x", "x", "x", "x", "x", "x", "x", "x", "x","x",
+        "x", "x", "x", "x", "x", "x", "x", "x", "x","x",
         "x", "mT", "mR", "mL", "mK", "mD", "mL", "mR", "mT","x",
         "x", "mS", "mS", "mS", "mS", "mS", "mS", "mS", "mS","x",
         "x", " ", " ", " ", " ", " ", " ", " ", " ","x",
         "x", " ", " ", " ", " ", " ", " ", " ", " ","x",
         "x", " ", " ", " ", " ", " ", " ", " ", " ","x",
-        "x", " ", " ", " ", " ", " ", " ", " ", " ","x",
+        "x", " ",  " ",  " ",  " ",  " ",  " ",  " ",  " ","x",
         "x", "vS", "vS", "vS", "vS", "vS", "vS", "vS", "vS","x",
         "x", "vT", "vR", "vL", "vD", "vK", "vL", "vR", "vT","x",
-        "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"
+        "x", "x", "x", "x", "x", "x", "x", "x", "x", "x",
+        "x", "x", "x", "x", "x", "x", "x", "x", "x", "x",
     ]
 
     # Alkuperäinen lauta johon verrata tietyissä tilanteissa
@@ -28,8 +30,19 @@ class Shakki:
     # Kirjanpito laudalla tapahtuineista siirroista
     siirrot: list
 
+    lMetodit: list
+
+    
     def __init__(self) -> None:
         self.alkuperainen_lauta = self.lauta
+        lMetodit = {
+            "S": self.sLailliset,
+            "L": self.lLailliset,
+            "R": self.rLailliset,
+            "T": self.tLailliset,
+            "K": self.kLailliset,
+            "D": self.dLailliset
+        }
 
     # Tulostaa pelihetkeä vastaavan laudan "väärinpäin"
     def tulostaVaarinpain(self) -> str:
@@ -51,7 +64,7 @@ class Shakki:
     
     # Tarkistaa onko nappula ulos laudalta
     def laudanSisalla(self, koordinaatti: int) -> bool:
-        return self.lauta[koordinaatti] != ""
+        return self.lauta[koordinaatti] != "x"
 
     # Tarkistaa onko lauta vielä siirron jälkeen pelisääntöjen mukainen
     def laillinenLauta() -> None:
@@ -59,17 +72,21 @@ class Shakki:
 
     # Palauttaa listan, joka sisältää tietyn nappularyhmän nappuloiden koordinaatit
     def nappulaRyhma(self, vari: str, tyyppi: str) -> list:
-        return [i for i in range (10, len(self.lauta)-11) if self.lauta[i] == (vari+tyyppi)]
+        return [i for i in range (20, len(self.lauta)-19) if self.lauta[i] == (vari+tyyppi)]
     
     # Selvitetään onko koordinaatin nappula liikkunut
     def __eiLiikkunut(self, koordinaatti: int) -> list:
         return self.lauta[koordinaatti] == self.alkuperainen_lauta[koordinaatti]
 
     # Siirtää shakkinappulan laudalla
+    # TODO: pseudo laillisen siirron tarkistus
     def siirto(self, koordinaatti1: int, koordinaatti2: int) -> None:
-        self.lauta[koordinaatti2] = self.lauta[koordinaatti1]
-        self.lauta[koordinaatti1] = " "
-    
+        try:
+            if koordinaatti2 in self.lMetodit[self.lauta[koordinaatti1][1]](self.lauta[koordinaatti1][0], [koordinaatti1]):
+                self.lauta[koordinaatti2] = self.lauta[koordinaatti1]
+                self.lauta[koordinaatti1] = " "
+        except:
+            print("valitse nappula siirrettäväksi")
     # Palauttaa vastakkaisen varin
     def vastVari(self, vari: str) -> str:
         return "v" if vari == "m" else "m"
@@ -83,18 +100,26 @@ class Shakki:
         pass
 
     # Ratsun lailliset siirrot värin ja koordinaatin perusteella
-    def __rLailliset(self, vari: str) -> list:
+    # ratsun loikat: [21, -21, 8,-8,-13, 13, 19, -19, -12, 12]
+    def rLailliset(self, vari: str, koordinaatit: list) -> list:
         lailliset = []
-        for i in [21, -21, 8,-8,-13, 13, 19, -19, -12, 12]:
-            pass
+        vastavari = self.vastVari(vari)
+
+        for k in koordinaatit:
+            for l in [21, -21, 8,-8,-13, 13, 19, -19, -12, 12]:
+                if self.lauta[k+l][0] in [" ", vastavari]:
+                    lailliset.append(k+l)
+
+        return lailliset
+            
 
     # TODO: yleinen metodi liukuville nappuloille ???
     # Lähetin lailliset siirrot värin ja koordinaatin perusteella
 
-    def lLailliset(self, vari: str) -> list:
+    def lLailliset(self, vari: str, koordinaatit: list) -> list:
         lailliset = []
         suunnat = [-11, 11, -9, 9]
-        for i in self.nappulaRyhma(vari, "L"):
+        for i in koordinaatit:
             for j in suunnat:
                 c = 1
                 siirto = i+(c*j)
@@ -114,10 +139,10 @@ class Shakki:
     # TODO: yleinen metodi liukuville nappuloille ???
     # Tornin lailliset siirrot värin ja koordinaatin perusteella
 
-    def tLailliset(self, vari: str) -> list:
+    def tLailliset(self, vari: str, koordinaatit: list) -> list:
         lailliset = []
         suunnat = [1, -1 , -10, 10]
-        for i in self.nappulaRyhma(vari, "T"):
+        for i in koordinaatit:
             for j in suunnat:
                 c = 1
                 siirto = i+(c*j)
@@ -136,7 +161,7 @@ class Shakki:
     # Soturin lailliset siirrot värin ja koordinaatin perusteella
 
     # TODO: siirron TÄYDELLINEN laillisuus
-    def sLailliset(self, vari: str) -> list:
+    def sLailliset(self, vari: str, koordinaatit: list) -> list:
 
         """ 
         Asetetaan siirtoja varten kerroin k, joko positiiviseksi (nappulaa siirretään eteenpäin listassa)
@@ -146,22 +171,33 @@ class Shakki:
         if vari == "v":
             k = -1
 
-        lailliset = [i for i in self.nappulaRyhma(vari, "S") if self.lauta[i+(11*k)][0] == self.vastVari(vari) or self.lauta[i+(9*k)][0] == self.vastVari(vari)]
+        lailliset = [i for i in koordinaatit if self.lauta[i+(11*k)][0] == self.vastVari(vari) or self.lauta[i+(9*k)][0] == self.vastVari(vari)]
 
-        for j in self.nappulaRyhma(vari, "S"):
-            if self.lauta[j+(9*k)] == " ":
+        for j in koordinaatit:
+            if self.lauta[j+(10*k)] == " ":
                 lailliset.append(j+(10*k))
                 if self.__eiLiikkunut(j):
                     lailliset.append(j+(20*k))
         return lailliset
             
     # Kuninkaan lailliset siirrot värin ja koordinaatin perusteella
-    def kLailliset(self, vari: str) -> list:
-        pass
+    # TODO: tarkista onko ruutu, johon kuningas siirretään hyökätty.
+    def kLailliset(self, vari: str, koordinaatit: list) -> list:
+        lailliset = []
+        vastavari = self.vastVari()
+        for k in koordinaatit:
+            for s in [10, -10, 11, -11, 1, -1, 9, -9]:
+                if self.lauta[k+s][0] in [" ", vastavari]:
+                    lailliset.append(k+s)
+        return lailliset
 
     # Daamin lailliset siirrot värin ja koordinaatin perusteella
-    def dLailliset(self, vari: str) -> list:
-        pass
+    def dLailliset(self, vari: str, koordinaatti: list) -> list:
+        return self.lLailliset(vari, koordinaatti) + self.tLailliset(vari, koordinaatti)
 
-        
+    def linnoitusTarkistus(self, vari: str) -> int:
+        pass
+    
+    def linnoitus(self, vari: str, puoli: int) -> None:
+        pass
 
