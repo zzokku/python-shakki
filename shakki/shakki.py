@@ -17,7 +17,7 @@ class Shakki:
         "x", " ", " ", " ", " ", " ", " ", " ", " ","x",
         "x", " ", " ", " ", " ", " ", " ", " ", " ","x",
         "x", " ", " ", " ", " ", " ", " ", " ", " ","x",
-        "x", " ",  " ",  " ",  " ",  " ",  " ",  " ",  " ","x",
+        "x", " ", " ", " ", " ", " ", " ", " "," ","x",
         "x", "vS", "vS", "vS", "vS", "vS", "vS", "vS", "vS","x",
         "x", "vT", "vR", "vL", "vD", "vK", "vL", "vR", "vT","x",
         "x", "x", "x", "x", "x", "x", "x", "x", "x", "x",
@@ -32,10 +32,16 @@ class Shakki:
 
     lMetodit: list
 
+    shakkiKoordinaatit = {}
+
+
     
     def __init__(self) -> None:
+        # Asetetaan alkuperäinen lauta
         self.alkuperainen_lauta = self.lauta
-        lMetodit = {
+
+        # Metodit eri nappuloiden laillisille siirroille
+        self.lMetodit = {
             "S": self.sLailliset,
             "L": self.lLailliset,
             "R": self.rLailliset,
@@ -43,8 +49,28 @@ class Shakki:
             "K": self.kLailliset,
             "D": self.dLailliset
         }
+        # Koordinaatisto
+        self.koordinaatit()
+       
+    
+
+    def koordinaatit(self) -> None:
+        # Lisätään koordinaatisto sanakirjaan
+        a = 91
+        k = 0
+        for s in "abcdefgh":
+            for i in range(1, 9):
+                self.shakkiKoordinaatit[s+str(i)] = a
+                a-=10
+            k += 1
+            a = 91 + k
+            
+        print(self.shakkiKoordinaatit)
+
+
 
     # Tulostaa pelihetkeä vastaavan laudan "väärinpäin"
+    # TODO: logiikka
     def tulostaVaarinpain(self) -> str:
         return self.lauta
 
@@ -80,13 +106,15 @@ class Shakki:
 
     # Siirtää shakkinappulan laudalla
     # TODO: pseudo laillisen siirron tarkistus
-    def siirto(self, koordinaatti1: int, koordinaatti2: int) -> None:
+    def siirto(self, koordinaatti1: int, koordinaatti2: int) -> bool:
         try:
             if koordinaatti2 in self.lMetodit[self.lauta[koordinaatti1][1]](self.lauta[koordinaatti1][0], [koordinaatti1]):
                 self.lauta[koordinaatti2] = self.lauta[koordinaatti1]
                 self.lauta[koordinaatti1] = " "
+                return True
         except:
-            print("valitse nappula siirrettäväksi")
+            return False
+        
     # Palauttaa vastakkaisen varin
     def vastVari(self, vari: str) -> str:
         return "v" if vari == "m" else "m"
@@ -109,7 +137,6 @@ class Shakki:
             for l in [21, -21, 8,-8,-13, 13, 19, -19, -12, 12]:
                 if self.lauta[k+l][0] in [" ", vastavari]:
                     lailliset.append(k+l)
-
         return lailliset
             
 
