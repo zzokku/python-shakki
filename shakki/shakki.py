@@ -239,3 +239,29 @@ class Shakki:
 
     def varinNappulat(self, vari: str):
         return [i for i in range(21, 90) if self.lauta[i][0] == vari]
+
+    def daamiTaiLahetti(self, koordinaatti: int) -> bool:
+        return self.lauta[koordinaatti][1] == "D" or self.lauta[koordinaatti][1] == "L" if len(self.lauta[koordinaatti]) > 1 else False
+    
+    def daamiTaiTorni(self, koordinaatti: int) -> bool:
+        return self.lauta[koordinaatti][1] == "D" or self.lauta[koordinaatti][1] == "T" if len(self.lauta[koordinaatti]) > 1 else False
+
+    def liukuvaNappula(self, koordinaatti: int) -> bool:
+        return self.lauta[koordinaatti][1] in ["T", "D", "L"] if len(self.lauta[koordinaatti]) > 1 else False
+    
+    def kiinnitettyHaku(self, vari: str) -> True:
+        ruudut = []
+        for i in self.dLailliset(vari, [self.kuninkaanSijainti(vari)]):
+            ruudut.append(i)
+            if self.liukuvaNappula(i):
+                return ruudut
+            ruudut = []
+        return ruudut
+
+    def kuninkaanSijainti(self, vari: str) -> int:
+        for i in range(21, len(self.lauta)-21):
+            if self.lauta[i] == vari+"K":
+                return i
+
+    
+
