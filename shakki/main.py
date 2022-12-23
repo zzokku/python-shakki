@@ -1,7 +1,6 @@
 from shakki import Shakki
 
 shakki = Shakki()
-
 def peli():
     shakki.pelilauta()
     vuoro = "v"
