@@ -35,7 +35,6 @@ class Shakki:
     shakkiKoordinaatit = {}
 
 
-    
     def __init__(self) -> None:
         # Asetetaan alkuperäinen lauta
         self.alkuperainen_lauta = self.lauta
@@ -64,9 +63,6 @@ class Shakki:
                 a-=10
             k += 1
             a = 91 + k
-            
-        print(self.shakkiKoordinaatit)
-
 
 
     # Tulostaa pelihetkeä vastaavan laudan "väärinpäin"
@@ -121,8 +117,21 @@ class Shakki:
     def __laillisetSiirrot(self, vari: str) -> list:
         pass
 
-    def hyokkaajatLauta(self, vari: str) -> list:
-        pass
+    # TODO: korjauksia
+    # 
+    def ruutuHyokatty(self, vari: str, koordinaatti: int) -> bool:
+        koords = self.varinNappulat(vari)
+        for i in koords:
+            if koordinaatti in self.lMetodit[self.lauta[i][1]](vari, [i]):
+                return True
+        return False
+
+    
+    # Palauttaa listan kaikista ruuduista, mikä on hyökätty liukuvan nappulan toimesta.
+    def liukuvatHyokkaajat(self, vari: str) -> list:
+        ruudut = []
+        return ruudut
+
 
     # Ratsun lailliset siirrot värin ja koordinaatin perusteella
     # ratsun loikat: [21, -21, 8,-8,-13, 13, 19, -19, -12, 12]
@@ -211,7 +220,7 @@ class Shakki:
         vastavari = self.vastVari()
         for k in koordinaatit:
             for s in [10, -10, 11, -11, 1, -1, 9, -9]:
-                if self.lauta[k+s][0] in [" ", vastavari]:
+                if self.lauta[k+s][0] in [" ", vastavari] and not self.ruutuHyokatty(k+s):
                     lailliset.append(k+s)
         return lailliset
 
@@ -228,4 +237,5 @@ class Shakki:
     def indeksitKoordinaateiksi(self, indeksit):
         return [i for i in list(self.shakkiKoordinaatit.keys()) if self.shakkiKoordinaatit[i] in indeksit]
 
-
+    def varinNappulat(self, vari: str):
+        return [i for i in range(21, 90) if self.lauta[i][0] == vari]
