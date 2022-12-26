@@ -39,7 +39,7 @@ class Shakki:
     def __init__(self) -> None:
         # Asetetaan alkuperäinen lauta
         self.alkuperainen_lauta = self.lauta
-
+        self.siirrot = []
         # Metodit eri nappuloiden laillisille siirroille
         self.lMetodit = {
             "S": self.sLailliset,
@@ -66,8 +66,6 @@ class Shakki:
             a = 91 + k
             
         print(self.shakkiKoordinaatit)
-
-
 
     # Tulostaa pelihetkeä vastaavan laudan "väärinpäin"
     # TODO: logiikka
@@ -195,7 +193,8 @@ class Shakki:
         if vari == "v":
             k = -1
 
-        lailliset = [i for i in koordinaatit if self.lauta[i+(11*k)][0] == self.vastVari(vari) or self.lauta[i+(9*k)][0] == self.vastVari(vari)]
+        lailliset = [i+(11*k) for i in koordinaatit if self.lauta[i+(11*k)][0] == self.vastVari(vari)]
+        lailliset.extend([i+(9*k) for i in koordinaatit if self.lauta[i+(9*k)][0] == self.vastVari(vari)])
 
         for j in koordinaatit:
             if self.lauta[j+(10*k)] == " ":
@@ -227,5 +226,11 @@ class Shakki:
 
     def indeksitKoordinaateiksi(self, indeksit):
         return [i for i in list(self.shakkiKoordinaatit.keys()) if self.shakkiKoordinaatit[i] in indeksit]
+
+    def laillisetSiirrot(self):
+        pass
+
+    def kiinnitysSuora():
+        pass
 
 
