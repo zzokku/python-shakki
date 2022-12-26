@@ -153,6 +153,8 @@ class Shakki:
                         break
                     if self.lauta[siirto] == " ":
                          lailliset.append(siirto)
+                    if self.lauta[siirto] == "x":
+                        break
                     else:
                         break
   
@@ -161,7 +163,7 @@ class Shakki:
     # TODO: yleinen metodi liukuville nappuloille ???
     # Tornin lailliset siirrot värin ja koordinaatin perusteella
 
-    def tLailliset(self, vari: str, koordinaatit: list) -> list:
+    def tLailliset(self, vari: str, koordinaatit: list, tila: bool) -> list:
         lailliset = []
         suunnat = [1, -1 , -10, 10]
         for i in koordinaatit:
@@ -173,11 +175,16 @@ class Shakki:
                     c+=1
                     if self.lauta[siirto][0] == self.vastVari(vari):
                         lailliset.append(siirto)
-                        break
+                        if not tila:
+                            break
                     if self.lauta[siirto] == " ":
                         lailliset.append(siirto)
+
+                    if self.lauta[siirto] == "x":
+                        break
                     else:
-                        break     
+                        if not tila:
+                            break     
         return lailliset
 
     # Soturin lailliset siirrot värin ja koordinaatin perusteella
@@ -224,13 +231,49 @@ class Shakki:
     def linnoitus(self, vari: str, puoli: int) -> None:
         pass
 
+    def torniTaiDaami(self, vari: str, koordinaatti: int) -> bool:
+        return self.lauta[koordinaatti] in [vari+"T", vari+"D"]
+    
+    def lahettiTaiDaami(self, vari: str, koordinaatti: int) -> bool:
+        return self.lauta[koordinaatti] in [vari+"L", vari+"D"]
+
     def indeksitKoordinaateiksi(self, indeksit):
         return [i for i in list(self.shakkiKoordinaatit.keys()) if self.shakkiKoordinaatit[i] in indeksit]
 
-    def laillisetSiirrot(self):
+    # Poistaa laittomat siirrot pseudo-laillisista siirroista. Esim. siirron, joka jättää kuninkaan shakkiin.
+    # Vain yksi nappula kerrallaan.
+    def laillisetSiirrot(self, pseudo_lailliset: list) -> list:
         pass
 
-    def kiinnitysSuora():
-        pass
+    def kiinnitysSuora(self, vari: str, kuninkaan_koordinaatti: int, nappulan_koordinaatti: int) -> list:
+        l1 = []
+        l2 = []
+
+        for i in self.tLailliset(vari, [kuninkaan_koordinaatti], True):
+            if self.lauta[i] == " ":
+                l1.append(i)
+            
+            # Turha?
+            if i == nappulan_koordinaatti:
+                l2.append(i)
+
+            # TODO: extend?
+            if self.torniTaiDaami(self.vastVari(vari), i):
+                return list(set(l1) ^ set(l2))
+
+    
+    def kiinnitysDiagonaali(self, vari: str, kuninkaan_koordinaatti: int) -> list:
+        l1 = []
+        l2 = []
+
+        for i in self.lLailliset(vari, [kuninkaan_koordinaatti]):
+            if self.lauta[i] == " ":
+                l1.append(i)
+            if self.lauta[i][0] == vari:
+                l2.append(i)
+            if self.lahettiTaiDaami(self.vastVari(vari), i):
+                return list(set(l1) ^ set(l2))
+
+    
 
 
